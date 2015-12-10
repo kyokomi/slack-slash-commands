@@ -2,18 +2,20 @@ package app
 
 import (
 	"net/http"
-	"google.golang.org/appengine/log"
-	"google.golang.org/appengine"
+
+	"plugins"
+	"plugins/echo"
+	"strings"
 )
 
 func init() {
-	http.HandleFunc("/v1/cmd", slackSlashCommands)
-}
+	slackCmd := plugins.New()
+	p := echo.New()
 
-func slackSlashCommands(w http.ResponseWriter, r *http.Request) {
-	ctx := appengine.NewContext(r)
-	r.ParseForm()
-	log.Debugf(ctx, "postForm %#v\n", r.PostForm)
+	slackCmd.AddPlugin("echo", p)
 
-	w.Write([]byte("Hello World slack-slash-commands"))
+	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {
+		args := strings.Fields(r.FormValue("text"))
+		w.Write([]byte(slackCmd.Execute(args[0], args[1:]...)))
+	})
 }
