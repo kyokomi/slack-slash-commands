@@ -1,12 +1,15 @@
 package plugins
 
-import "fmt"
+import (
+	"fmt"
+	"slack"
+)
 
 type command string
 
 type SlashCommand interface {
 	AddPlugin(cmd string, plugin Plugin)
-	Execute(cmd string, args ...string) string
+	Execute(slash *slack.SlashCommandService, req slack.SlashCommandRequest) string
 }
 
 type slashCommandContext struct {
@@ -17,16 +20,13 @@ func (c *slashCommandContext) AddPlugin(cmd string, plugin Plugin) {
 	c.Plugins[command(cmd)] = plugin
 }
 
-func (c *slashCommandContext) Execute(cmd string, args ...string) string {
-	if len(cmd) == 0 {
-		return "TODO: help"
-	}
-
+func (c *slashCommandContext) Execute(slash *slack.SlashCommandService, req slack.SlashCommandRequest) string {
+	cmd, _ := req.CmdArgs()
 	p, ok := c.Plugins[command(cmd)]
 	if !ok {
 		return fmt.Sprintf("%s command not found", string(cmd))
 	}
-	return p.Do(cmd, args...)
+	return p.Do(slash, req)
 }
 
 func New() SlashCommand {
@@ -36,5 +36,5 @@ func New() SlashCommand {
 }
 
 type Plugin interface {
-	Do(cmd string, args ...string) (responseMessage string)
+	Do(slash *slack.SlashCommandService, req slack.SlashCommandRequest) (responseMessage string)
 }

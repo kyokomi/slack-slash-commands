@@ -1,9 +1,9 @@
-package echo
+package time
 
 import (
 	"plugins"
 	"slack"
-	"strings"
+	"time"
 )
 
 type plugin struct {
@@ -14,6 +14,14 @@ func New() plugins.Plugin {
 }
 
 func (p *plugin) Do(slash *slack.SlashCommandService, req slack.SlashCommandRequest) (responseMessage string) {
-	_, args := req.CmdArgs()
-	return "Echo Message " + strings.Join(args, "")
+	res, err := slash.Reply(req, slack.NewInChannelMessage(
+		time.Now().Format(time.RFC3339),
+	))
+
+	if err != nil {
+		return err.Error()
+	}
+	defer res.Body.Close()
+
+	return ""
 }

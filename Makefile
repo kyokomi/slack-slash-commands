@@ -6,6 +6,7 @@ install:
 	mkdir -p $(VENDOR_GOPATH)
 	-goapp get -u google.golang.org/appengine
 	goapp get -u golang.org/x/net/context
+	goapp get -u github.com/unrolled/render
 
 clean:
 	rm -rf $(VENDOR_GOPATH)
