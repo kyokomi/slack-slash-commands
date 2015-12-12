@@ -10,9 +10,7 @@ import (
 
 func init() {
 	slackCmd := plugins.New()
-	p := echo.New()
-
-	slackCmd.AddPlugin("echo", p)
+	slackCmd.AddPlugin("echo", echo.New())
 
 	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {
 		args := strings.Fields(r.FormValue("text"))
