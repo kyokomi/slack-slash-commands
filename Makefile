@@ -7,6 +7,7 @@ install:
 	-goapp get -u google.golang.org/appengine
 	goapp get -u golang.org/x/net/context
 	goapp get -u github.com/unrolled/render
+	goapp get -u github.com/kyokomi/goslash/goslash
 
 clean:
 	rm -rf $(VENDOR_GOPATH)

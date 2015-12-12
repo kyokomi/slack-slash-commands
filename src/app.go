@@ -3,10 +3,10 @@ package app
 import (
 	"net/http"
 
-	"plugins"
-	"plugins/echo"
-	"plugins/time"
-	"slack"
+	"github.com/kyokomi/goslash/goslash"
+	"github.com/kyokomi/goslash/plugins"
+	"github.com/kyokomi/goslash/plugins/echo"
+	"github.com/kyokomi/goslash/plugins/time"
 
 	"github.com/unrolled/render"
 	"google.golang.org/appengine"
@@ -24,7 +24,7 @@ func init() {
 	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {
 		ctx := appengine.NewContext(r)
 
-		req, err := slack.ParseFormSlashCommandRequest(r)
+		req, err := goslash.ParseFormSlashCommandRequest(r)
 		if err != nil {
 			renderer.JSON(w, http.StatusInternalServerError, err.Error())
 			return
