@@ -2,6 +2,7 @@ package echo
 
 import (
 	"plugins"
+	"slack"
 	"strings"
 )
 
@@ -12,6 +13,9 @@ func New() plugins.Plugin {
 	return &plugin{}
 }
 
-func (p *plugin) Do(cmd string, args ...string) (responseMessage string) {
-	return "Echo Message " + strings.Join(args, "")
+func (p *plugin) Do(req slack.SlashCommandRequest) slack.SlashCommandMessage {
+	_, args := req.CmdArgs()
+	return slack.NewMessage(
+		"Echo Message " + strings.Join(args, ""),
+	)
 }
