@@ -14,11 +14,12 @@ import (
 )
 
 func init() {
-	slackCmd := plugins.New()
-	slackCmd.AddPlugin("echo", echo.New())
-	slackCmd.AddPlugin("time", time.New())
-
 	renderer := render.New(render.Options{})
+
+	slashPlugins := map[string]plugins.Plugin{
+		"echo": echo.New(),
+		"time": time.New(),
+	}
 
 	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {
 		ctx := appengine.NewContext(r)
@@ -29,8 +30,8 @@ func init() {
 			return
 		}
 
-		client := slack.New(urlfetch.Client(ctx))
+		slashCmd := plugins.New(urlfetch.Client(ctx), slashPlugins)
 
-		renderer.Text(w, http.StatusOK, slackCmd.Execute(client.SlashCommand, req))
+		renderer.Text(w, http.StatusOK, slashCmd.Execute(req))
 	})
 }

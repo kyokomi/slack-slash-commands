@@ -13,7 +13,9 @@ func New() plugins.Plugin {
 	return &plugin{}
 }
 
-func (p *plugin) Do(slash *slack.SlashCommandService, req slack.SlashCommandRequest) (responseMessage string) {
+func (p *plugin) Do(req slack.SlashCommandRequest) slack.SlashCommandMessage {
 	_, args := req.CmdArgs()
-	return "Echo Message " + strings.Join(args, "")
+	return slack.NewMessage(
+		"Echo Message " + strings.Join(args, ""),
+	)
 }

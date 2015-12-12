@@ -35,6 +35,12 @@ type SlashCommandMessage struct {
 	Attachments  []Attachment `json:"attachments,omitempty"`
 }
 
+func NewMessage(text string) SlashCommandMessage {
+	return SlashCommandMessage{
+		Text: text,
+	}
+}
+
 func NewInChannelMessage(text string) SlashCommandMessage {
 	return SlashCommandMessage{
 		ResponseType: "in_channel",
