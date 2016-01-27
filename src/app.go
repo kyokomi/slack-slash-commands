@@ -6,6 +6,7 @@ import (
 	"github.com/kyokomi/goslash/goslash"
 	"github.com/kyokomi/goslash/plugins"
 	"github.com/kyokomi/goslash/plugins/echo"
+	"github.com/kyokomi/goslash/plugins/suddendeath"
 	"github.com/kyokomi/goslash/plugins/time"
 
 	"github.com/unrolled/render"
@@ -19,6 +20,7 @@ func init() {
 	slashPlugins := map[string]plugins.Plugin{
 		"echo": echo.New(),
 		"time": time.New(),
+		"突然":   suddendeath.New(),
 	}
 
 	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {

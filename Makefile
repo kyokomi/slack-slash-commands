@@ -4,10 +4,7 @@ GOPATH=$(VENDOR_GOPATH)
 
 install:
 	mkdir -p $(VENDOR_GOPATH)
-	-goapp get -u google.golang.org/appengine
-	goapp get -u golang.org/x/net/context
-	goapp get -u github.com/unrolled/render
-	goapp get -u github.com/kyokomi/goslash/goslash
+	sh ./goapp.sh
 
 clean:
 	rm -rf $(VENDOR_GOPATH)
@@ -15,9 +12,13 @@ clean:
 run:
 	goapp serve ./src
 
+clean-run:
+	goapp serve --clear_datastore ./src
+
 test:
 	GOPATH=$(VENDOR_GOPATH):$(ROOT_GOPATH) goapp test -v ./src/...
 
-deploy: test
+deploy:
 	goapp deploy ./src
+
 
