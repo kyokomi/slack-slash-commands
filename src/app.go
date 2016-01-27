@@ -9,6 +9,7 @@ import (
 	"github.com/kyokomi/goslash/plugins/suddendeath"
 	"github.com/kyokomi/goslash/plugins/time"
 
+	"github.com/kyokomi/goslash/plugins/lgtm"
 	"github.com/unrolled/render"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
@@ -17,12 +18,6 @@ import (
 func init() {
 	renderer := render.New(render.Options{})
 
-	slashPlugins := map[string]plugins.Plugin{
-		"echo": echo.New(),
-		"time": time.New(),
-		"突然":   suddendeath.New(),
-	}
-
 	http.HandleFunc("/v1/cmd", func(w http.ResponseWriter, r *http.Request) {
 		ctx := appengine.NewContext(r)
 
@@ -30,6 +25,13 @@ func init() {
 		if err != nil {
 			renderer.JSON(w, http.StatusInternalServerError, err.Error())
 			return
+		}
+
+		slashPlugins := map[string]plugins.Plugin{
+			"echo": echo.New(),
+			"time": time.New(),
+			"突然":   suddendeath.New(),
+			"LGTM": lgtm.New(urlfetch.Client(ctx)),
 		}
 
 		slashCmd := plugins.New(urlfetch.Client(ctx), slashPlugins)
