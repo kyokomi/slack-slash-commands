@@ -19,5 +19,6 @@ goapp get -u github.com/kyokomi/goslash/plugins/time
 goapp get -u github.com/kyokomi/goslash/plugins/echo
 goapp get -u github.com/kyokomi/goslash/plugins/suddendeath
 goapp get -u github.com/kyokomi/goslash/plugins/lgtm
+goapp get -u github.com/kyokomi/goslash/plugins/akari
 goapp get -u github.com/PuerkitoBio/goquery
 
